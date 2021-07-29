@@ -1,0 +1,12 @@
+
+2021.07.10: gen_amba_axi: command line option changed.
+2021.07.01: gen_amba_axi: 'WID' port removed for AMBA AXI4.
+2021.06.01: gen_amba_axi: 'M?_MID' port removed.
+2021.06.01: gen_amba_axi: 'AMBA_AXI4' removed and '--axi3' option added.
+2021.06.01: gen_amba_axi: 'AMBA_QOS' instead 'AMBA_AXI4' to use 'AxQOS/AxRESION' port.
+2020.04.29: 'gen_axi2apb_bridge.c', stateW/R ASCII
+2020.01.08: 'axi_master_tasks.v' updated to check validity of size.
+2019.11.27: address overlapping bug fixed: gen_amba_axi/src/gen_axi_amba.c
+2018.10.17: 'axi_to_apb' has been updated.
+2018.09.20: 'AWUSER/WUSER/BUSER/ARUSER/RUSER' have been activated by definition.
+            'CLOCK_RATION' ports to parameter for AXI and APB

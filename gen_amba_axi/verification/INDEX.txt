@@ -1,0 +1,4 @@
+ip/             Contains verification related blocks
+sim/iverilog/   Icarus verilog simulator project
+sim/modelsim/   Mentor Graphics ModelSim project (need to revision)
+sim/xsim/       Xilinx Vivado simulator project

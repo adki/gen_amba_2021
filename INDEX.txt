@@ -1,0 +1,5 @@
+gen_amba_apb/      AMBA APB bus code including generating C code
+                   - AHB2APB
+                   - AXI2APB
+gen_amba_ahb/      AMBA AHB bus code including generating C code
+gen_amba_axi/      AMBA AXI bus code

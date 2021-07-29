@@ -1,0 +1,13 @@
+*.log
+xst
+_xmsgs
+*.ngc
+*.xncf
+*.log
+*.edif
+*.ngr
+*.lso
+*.blc
+xlnx_auto_0_xdb
+*_xst.xrpt
+xlnx_auto_*.ise

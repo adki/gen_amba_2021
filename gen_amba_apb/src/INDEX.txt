@@ -1,0 +1,17 @@
+main.c
+    |
+    +--arg_parser.c
+    |
+    +--gen_ahb2apb.c (ahb_to_apb_sn)
+    |
+    +--gen_ahb2apb_bridge.c (ahb_to_apb_bridge)
+    |
+    +--gen_axi2apb.c (axi_to_apb_sn)
+    |
+    +--gen_axi2apb_bridge.c (axi_to_apb_bridge)
+    |
+    +--gen_apb_amba.c (amba_apb_sn)
+           |
+           +--gen_apb_decoder.c (apb_decoder_sn)
+           |
+           +--gen_apb_mux.c (apb_mux_sn)

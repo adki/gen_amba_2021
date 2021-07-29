@@ -1,0 +1,2 @@
+Do not try to open 'gen_amba_nnn.doc' since it is protected document.
+Do not try to open 'amba_axi_nnn.doc' since it is protected document.

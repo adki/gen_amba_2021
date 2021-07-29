@@ -1,0 +1,12 @@
+
+1. 'PADDR[WIDTH_PAD-1]'
+2. AXI-Lite option
+   - single burst
+   - no partial
+   - 32-bit data only
+   - non-bufferable
+   - no exclusive
+   - no xID
+3. AXI-to-APB for 512-bit data incurs error
+   - especially read causes error.
+

@@ -1,0 +1,17 @@
+main.c
+    |
+    +--arg_parser.c
+    |
+    +--gen_ahb_amba.c
+           |
+           +--gen_ahb_arbiter.c (ahb_arbiter)
+           |
+           +--gen_ahb_m2s.c (ahb_m2s)
+           |
+           +-- gen_ahb_lite.c (ahb_lite)
+                   |
+                   +--gen_ahb_decoder.c (ahb_decoder_sn)
+                   |
+                   +--gen_ahb_s2m.c (ahb_s2m_sn)
+                   |
+                   +--gen_ahb_default_slave.c (ahb_default_slave)

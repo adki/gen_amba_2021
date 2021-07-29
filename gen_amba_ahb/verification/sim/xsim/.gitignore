@@ -1,0 +1,13 @@
+top.wdb
+wave.vcd
+webtalk_*.backup.jou
+webtalk_*.backup.log
+webtalk.jou
+webtalk.log
+xelab.log
+xelab.pb
+xsim.dir
+xsim.jou
+xsim.log
+xvlog.log
+xvlog.pb

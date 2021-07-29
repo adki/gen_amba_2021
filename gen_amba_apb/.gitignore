@@ -1,0 +1,72 @@
+# Refer to results by searching ".gitignore templates"
+
+gen_amba_apb
+src*.old
+verification*.old
+*.vcd
+verification/design/*
+verification/sim/modelsim/work
+verification/sim/modelsim/transcript
+verification/sim/modelsim/compile.log
+erification/sim/iverilog/top.vvp
+verification/sim/iverilog/vvp.log
+verification/sim/iverilog/compile.log
+
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+
+#Visual Studio files
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+ipch/
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+Ankh.NoLoad
+
+#Tooling
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+#Project files
+[Bb]uild/
+
+#Subversion files
+.svn
+
+# Office Temp Files
+~$*
+
+# vi/vim swap file
+*.swp
+
+# core dump
+*.stack.dump
+
+# Vivado files
+.sim/
+.Xil/
+vivado.jou
+vivado.log
+vivado_*.jou
+vivado_*.log
