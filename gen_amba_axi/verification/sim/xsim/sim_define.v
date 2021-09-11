@@ -10,8 +10,8 @@
 `define BUS_DELAY  #(1)
 `define MEM_DELAY  0
 //-----------------------------------------------------------------------
-`define WIDTH_AD   32 // address width
-`define WIDTH_DA   128// data width
+`define WIDTH_AD   64  // address width
+`define WIDTH_DA   128 // data width
 `define AMBA_AXI4
 `undef  AMBA_AXI_CACHE
 `undef  AMBA_AXI_PROT

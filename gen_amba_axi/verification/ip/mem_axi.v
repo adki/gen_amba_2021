@@ -1,9 +1,9 @@
 //----------------------------------------------------------------
-//  Copyright (c) 2013 by Ando Ki.
-//  All right reserved.
-//  http://www.future-ds.com
-//  All rights are reserved by Ando Ki.
-//  Do not use in any means or/and methods without Ando Ki's permission.
+// Copyright (c) 2013 by Ando Ki.
+// All right reserved.
+// This is licensed with the 2-clause BSD license to make the program and
+// library useful in open and closed source products independent of their
+// licensing scheme.
 //----------------------------------------------------------------
 // mem_axi.v
 //----------------------------------------------------------------
@@ -262,6 +262,19 @@ module mem_axi #(parameter AXI_WIDTH_CID= 4 // Channel ID width in bits
              endcase
          end
      end
+     //-------------------------------------------------------------------------
+     // synthesis translate_off
+     reg  [8*10-1:0] stateW_ascii="IDLE";
+     always @ (stateW) begin
+     case (stateW)
+     STW_IDLE  : stateW_ascii="IDLE   ";
+     STW_WRITE0: stateW_ascii="WRITE0 ";
+     STW_WRITE : stateW_ascii="WRITE  ";
+     STW_RSP   : stateW_ascii="RSP    ";
+     default   : stateW_ascii="UNKNOWN";
+     endcase
+     end
+     // synthesis translate_on
      //-----------------------------------------------------------
      // read case
      //-----------------------------------------------------------
@@ -500,6 +513,27 @@ module mem_axi #(parameter AXI_WIDTH_CID= 4 // Channel ID width in bits
              endcase
          end
      end
+     //-------------------------------------------------------------------------
+     // synthesis translate_off
+     reg  [8*10-1:0] stateR_ascii="IDLE";
+     always @ (stateR) begin
+     case (stateR)
+     STR_IDLE  : stateR_ascii="IDLE  ";
+     STR_READ0 : stateR_ascii="READ0 ";
+     STR_READ1 : stateR_ascii="READ1 ";
+     STR_READ2 : stateR_ascii="READ2 ";
+     STR_READ21: stateR_ascii="READ21";
+     STR_READ22: stateR_ascii="READ22";
+     STR_READ3 : stateR_ascii="READ3 ";
+     STR_READ31: stateR_ascii="READ31";
+     STR_READ32: stateR_ascii="READ32";
+     STR_READ33: stateR_ascii="READ33";
+     STR_READ34: stateR_ascii="READ34";
+     STR_END   : stateR_ascii="END   ";
+     default  : stateR_ascii="UNKNOWN";
+     endcase
+     end
+     // synthesis translate_on
      //-----------------------------------------------------------
      function [7:0] get_bytes;
           input [2:0] size;

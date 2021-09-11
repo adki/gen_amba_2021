@@ -1,15 +1,15 @@
 `ifndef MEM_TEST_TASKS_V
 `define MEM_TEST_TASKS_V
 //----------------------------------------------------------------
-//  Copyright (c) 2018-2021 by Ando Ki.
-//  All right reserved.
-//  http://www.future-ds.com
-//  All rights are reserved by Ando Ki.
-//  Do not use in any means or/and methods without Ando Ki's permission.
+// Copyright (c) 2018-2021 by Ando Ki.
+// All right reserved.
+// This is licensed with the 2-clause BSD license to make the program and
+// library useful in open and closed source products independent of their
+// licensing scheme.
 //----------------------------------------------------------------
 // axi_tester.v
 //----------------------------------------------------------------
-// VERSION: 2021.07.10.
+// VERSION: 2021.09.05.
 //----------------------------------------------------------------
 reg error_flag=0;
 always @ ( * ) begin
@@ -21,42 +21,66 @@ end
 
 integer seed_mread=9;
 integer seed_mwrite=11;
-     //-----------------------------------------------------------
-     task test_single;
-          input [WIDTH_AD-1:0] addr;
-          input [15:0]         bnum; // num of bytes
-          input                delay;
-     begin
-          dataW[0] = {(2*WIDTH_DS){P_MST_ID[3:0]}};
-          axi_master_write(addr, bnum, 1, 1, 2'b00, delay);
-          axi_master_read (addr, bnum, 1, 1, 2'b00, delay);
-          axi_master_rmw  (addr, bnum,              delay);
+//-----------------------------------------------------------
+task test_single;
+     input [WIDTH_AD-1:0] addr;
+     input [15:0]         bnum; // num of bytes
+     input                delay;
+begin
+     dataW[0] = {(2*WIDTH_DS){P_MST_ID[3:0]}}+1;
+     axi_master_write(addr, bnum, 1, 1, 2'b00, delay);
+     axi_master_read (addr, bnum, 1, 1, 2'b00, delay);
+     axi_master_rmw  (addr, bnum,              delay);
+end
+endtask
+//-----------------------------------------------------------
+task test_burst;
+     input [WIDTH_AD-1:0] addr;
+     input [15:0]         bnum; // num of bytes for a beat
+     input [15:0]         blen; // burst length: 1 ~ 16
+     input [ 1:0]         burst; // type
+     input                delay;
+     input integer        random;
+     integer offset, ind, seed, w, error;
+     reg [WIDTH_AD-1:0] loc;
+     reg [WIDTH_DA-1:0] patt, mask;
+begin
+     loc = addr;
+     seed = random;
+     for (ind=0; ind<blen; ind=ind+1) begin
+         dataW[ind] = 'hX; // make unknown
+         offset = loc[WIDTH_DSB-1:0];
+         if (random==0) begin
+             //dataW[ind] = (P_MST_ID==1) ? ('h8765_4321+ind) : ('h1234_5678+ind);
+             dataW[ind] = {(2*WIDTH_DS){P_MST_ID[3:0]}} + ind;
+         end else begin
+             for (w=0; w<bnum; w=w+1) begin
+                  dataW[ind][8*w+:8] = $random(seed)&'hFF;
+             end
+         end
+         if (offset>0) dataW[ind] = dataW[ind]<<(8*offset);
+         loc = loc + bnum;
      end
-     endtask
-     //-----------------------------------------------------------
-     task test_burst;
-          input [WIDTH_AD-1:0] addr;
-          input [15:0]         bnum; // num of bytes for a beat
-          input [15:0]         blen; // burst length: 1 ~ 16
-          input [ 1:0]         burst; // type
-          input                delay;
-          input integer        random;
-          integer ind, seed;
-     begin
-          seed = random;
-          for (ind=0; ind<blen; ind=ind+1) begin
-              if (random==0) begin
-                  //dataW[ind] = (P_MST_ID==1) ? ('h8765_4321+ind) : ('h1234_5678+ind);
-                  dataW[ind] = {(2*WIDTH_DS){P_MST_ID[3:0]}} + ind;
-              end else begin
-                  dataW[ind] = $random(seed);
-              end
-          end
-          axi_master_write(addr, bnum, blen, burst, 2'b00, delay);
-          axi_master_read (addr, bnum, blen, burst, 2'b00, delay);
+     axi_master_write(addr, bnum, blen, burst, 2'b00, delay);
+     axi_master_read (addr, bnum, blen, burst, 2'b00, delay);
+     patt = (1<<(8*bnum))-1;
+     loc  = addr;
+     error = 0;
+     for (ind=0; ind<blen; ind=ind+1) begin
+         offset = loc[WIDTH_DSB-1:0];
+         mask = patt<<(8*offset);
+         if ((dataW[ind]&mask)!==(dataR[ind]&mask)) begin
+$display("%0t %m mismatch A:0x%x D:0x%x, but 0x%x expected %0d-byte:%0d-leng",
+          $time, addr, dataR[ind]&mask, dataW[ind]&mask, bnum, blen);
+             error = error + 1;
+         end
+         loc = loc + bnum;
      end
-     endtask
-     //-----------------------------------------------------------
+     if (error==0) $display($time,,"%m test_burst %0d-byte:%0d-leng OK", bnum, blen);
+     else          $display($time,,"%m test_burst %0d-byte:%0d-leng error %0d", bnum, blen, error);
+end
+endtask
+//-----------------------------------------------------------
      task test_error;
           input [WIDTH_AD-1:0] addr;
           input                delay;
@@ -218,6 +242,7 @@ error_flag=1;
 //----------------------------------------------------------------
 // Revision History
 //
+// 2021.09.05: "task test_burst" updated.
 // 2021.07.10: "task test_burst" added 'random' argument.
 // 2018.07.19: Started by Ando Ki (adki@future-ds.com)
 //----------------------------------------------------------------

@@ -1,4 +1,6 @@
 
+2021.09.05: bug-fixed: 'ADDR_BASE' parameter updated to support wider than 32-bit in 'gen_axi_top.h'
+2021.09.05: bug-fixed: "32'h???" to "'h???" for wider address 
 2021.07.10: gen_amba_axi: command line option changed.
 2021.07.01: gen_amba_axi: 'WID' port removed for AMBA AXI4.
 2021.06.01: gen_amba_axi: 'M?_MID' port removed.

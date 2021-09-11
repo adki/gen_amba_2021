@@ -4,7 +4,7 @@
 * *gen_amba_ahb*: AMBA AHB bus generator for multi-master and multi-slave
 * *gen_amba_apb*: AMBA APB bus-bridge generator for AMBA AXI or AHB
 
-Note that it is a new version of 'gen_amba' (https://github.com/adki/gen_amba).
+> Note that it is a new version of 'gen_amba' (https://github.com/adki/gen_amba).
 
 ## Table of contents
 
@@ -26,6 +26,7 @@ Note that it is a new version of 'gen_amba' (https://github.com/adki/gen_amba).
    4.2 [AMBA AHB Bus tasks](#bus_tasks_ahb)
 5. [Where to get more information](#where_to_get)
 6. [Where it has been used](#where_has_been_used)
+7. [Other things](#other_things)
 
 </details>
 
@@ -38,7 +39,7 @@ This is licensed with the 2-clause BSD license to make the program and library u
 This program requires followings.
 * Shell: Bash
 * GNU GCC: C compiler
-* HDL simulator: Xilinx Vivado simulator, Mentor Graphics ModelSim, or icarus Verilog
+* HDL simulator: Xilinx Vivado simulator, icarus Verilog, or Mentor Graphics ModelSim
 
 ### Maturity<a name="maturity"></a>
 * RTL simulation
@@ -54,6 +55,8 @@ This program requires followings.
 
 ### 1.1 Quick start for AMBA AXI<a name="quick_axi"></a>
 #### 1.1.1 generating AMBA AXI
+
+<details><summary>Click to expand</summary>
 
    1) go to 'gen_amba_axi' directory\
       *$ cd gen_amba_axi*
@@ -75,7 +78,7 @@ This program requires followings.
    2) run Makefile\
       *$ make cleanup*\
       *$ make MST=2 SLV=3*\
-      . It should generate necessary bus and top model and then invoke ModelSim simulator.\
+      . It should generate necessary bus and top model and then invoke HDL simulator.\
       . It uses top-level generator.
    3) have a look the result VCD wave\
       *$ gtkwave wave.vcd*
@@ -91,19 +94,22 @@ This program requires followings.
 
    3) how to change testing scenario
       * set 1 for the verilog plus command-line argument in the 'Makefile' in 'gen_amba_axi/verification/sim/xsim' directory\
-        *[xsim case] -testplusarg MULTIPLE_OUTSTANDING=1*\
-        *[iverilog case] +MULTIPLE_OUTSTANDING=1*\
-        *[ModelSim case] +MULTIPLE_OUTSTANDING=1*
+        *[xsim case] -testplusarg BURST_TEST=1*\
+        *[iverilog case] +BURST_TEST=1*\
+        *[ModelSim case] +BURST_TEST=1*
 
    4) how to add new testing scenario
       * add your scenario in the 'axi_tester.v' file in the 'gen_amba_axi/verification/ip' directory,
         where you can find some testing scenarios.
       * there is AMBA AXI task library in the 'gen_amba_axi/verification/ip/axi_master_tasks.v'.
+</details>
 
 ---
 
 ### 1.2. Quick start for AMBA AHB<a name="quick_ahb"></a>
 #### 1.2.1 generating AMBA AHB
+
+<details><summary>Click to expand</summary>
 
    1) go to 'gen_amba_ahb' directory\
       *$ cd gen_amba_ahb*
@@ -129,6 +135,7 @@ This program requires followings.
       . It uses top-level generator.
    3) have a look the result VCD wave\
       *$ gtkwave wave.vcd*
+</details>
 
 ---
 
@@ -139,7 +146,7 @@ There is AMBA bus generator for each bus.
 It generates AMBA AXI switch.
 <details><summary>Click to expand</summary>
 	
-```AXI
+```bash:
 $ ./gen_amba_axi -h
 [Usage] ./gen_amba_axi [options]
 	-M,--master=num   num of masters (default: 2)
@@ -171,7 +178,7 @@ generates AMBA AXI4.
 It generates AMBA AHB bus.
 <details><summary>Click to expand</summary>
 
-```AHB
+```bash:
 $ ./gen_amba_ahb -h
 [Usage] ./gen_amba_ahb [options]
 	-T,--lite         AMBA AHB-lite
@@ -201,7 +208,7 @@ by preventing from warning of multiple definition modules.
 It generates AMBA APB bus bridge for AHB or AXI.
 <details><summary>Click to expand</summary>
 
-```APB
+```bash:
 $ ./gen_amba_apb -h
 [Usage] ./gen_amba_ahb [options]
 	-X|H,--axi|ahb    make "axi_to_apb" or "ahb_to_apb" (axi if not given)
@@ -241,7 +248,7 @@ There is top-level generator for each bus in 'verification' directory.
 
 <details><summary>Click to expand</summary>
 
-```
+```bash:
 $ ./gen_axi_top.sh -h
 Usage : ./gen_axi_top.sh [options]
       -mst    num        :num of masters, 2
@@ -268,7 +275,7 @@ Usage : ./gen_axi_top.sh [options]
 
 <details><summary>Click to expand</summary>
 
-```
+```bash:
 $ ./gen_ahb_top.sh -h
 Usage : ./gen_ahb_top.sh [options]
       -mst    num        :num of masters, 2
@@ -294,7 +301,7 @@ Usage : ./gen_ahb_top.sh [options]
 
 <details><summary>Click to expand</summary>
 
-```
+```bash:
 $ ./gen_apb_top.sh -h
 Usage : ./gen_apb_top.sh [options]
       -ahb|axi           :AHB or AXI master: ahb
@@ -326,7 +333,7 @@ This task generates AXI write burst transaction.
 
 <details><summary>Click to expand</summary>
 
-```
+```verilog:
 task axi_master_write;
      input [WIDTH_AD-1:0] addr ;
      input [15:0]         bnum ; // num of byte for a beat of burst
@@ -364,7 +371,7 @@ This task generates AXI read burst transaction.
 
 <details><summary>Click to expand</summary>
 
-```
+```Verilog:
 task axi_master_read;
      input [WIDTH_AD-1:0] addr ;
      input [15:0]         bnum ; // num of byte for a beat of burst
@@ -402,8 +409,8 @@ to 'addr' address and retuns 'status' after completion.
 
 <details><summary>Click to expand</summary>
 
-```
-ask ahb_write;
+```Verilog:
+task ahb_write;
      input  [31:0] addr; // byte-wise adddress
      input  [31:0] data; // justifed data
      input  [ 2:0] size; // num of bytes
@@ -426,7 +433,7 @@ from 'addr' address and retuns 'status' after completion.
 
 <details><summary>Click to expand</summary>
 
-```
+```Verilog:
 task ahb_read;
      input  [31:0] addr; // byte-wise address
      output [31:0] data; // justified data
@@ -454,76 +461,84 @@ Lecture materials and codes are also available from Ando's GitHub:
 * AMBA lecture materials at GitHub: https://github.com/adki/AMBA_AXI_AHB_APB
 
 Source code is available from Ando's GitHub:
-* https://github.com/adki/gen_amba
+* https://github.com/adki/gen_amba_2021
 
 ---
 
 # 6. Where it has been used<a name="where_has_been_used"></a>
-### <a name="con_fmc"></a>6.1 <a href="http://www.future-ds.com">Future Design Systems</a> <a href="http://www.future-ds.com/en/products.html#CON_FMC">CON-FMC<sup>TM</sup></a> project
 
-#### 6.1.1 Gigabit Ethernet project
+### 6.1 HW-SW co-simulation
+Cosim BFM library is a package to provide HW-SW co-simulation between the HDL (Hardware Description Language) simulator and the host program, where BFM (Bus Functional Model or Bus Functional Module) generates bus transaction by interacting with the host program in C or Python.
+Refer to <a href="https://github.com/adki/cosim_bfm_library">HW-SW co-simulation library</a> repository.
+<img src="doc/images/cosimulation_bfm.png" width="500"/>
+
+### <a name="con_fmc"></a>6.2 <a href="http://www.future-ds.com">Future Design Systems</a> <a href="http://www.future-ds.com/en/products.html#CON_FMC">CON-FMC<sup>TM</sup></a> project
+
+#### 6.2.1 Gigabit Ethernet project
 
 <img src="doc/images/ethernet_platform.png" width="500"/>
 
-#### 6.1.2 AMBA AXI project
+#### 6.2.2 AMBA AXI project
 
 <img src="doc/images/amba_axi_memory.png" width="500"/>
 
-#### 6.1.3 AMBA AHB project
+#### 6.2.3 AMBA AHB project
 
 <img src="doc/images/amba_ahb_mem.png" width="500"/>
 
-### 6.2 Core-A project
+### 6.3 Core-A project
 
-#### 6.2.1 Papers
+#### 6.3.1 Papers
 * Ji-Hoon Kim, Jong-Yeol Lee, and Ando Ki, Core-A: A 32-bit Synthesizable Processor Core, IEIE Transactions on Smart Processing and Computing, vol. 4, no. 2, April 2015.
 
-#### 6.2.2 Basic platforms
+#### 6.3.2 Basic platforms
 * Ando Ki, Platform Design using Core-A Processor (Core-A 프로세서를 활용한 플랫폼 설계), HongReung Publishing, 2010.
 
-##### 6.2.2.1 Audio platform
+##### 6.3.2.1 Audio platform
 <img src="doc/images/corea-audio.gif" width="500"/>
 
-##### 6.2.2.2 Video platform
+##### 6.3.2.2 Video platform
 <img src="doc/images/corea-video.gif" width="500"/>
 
-##### 6.2.2.3 Ethernet platform
+##### 6.3.2.3 Ethernet platform
 <img src="doc/images/corea-network.gif" width="500"/>
 
-#### 6.2.3 Application platforms
+#### 6.3.3 Application platforms
 * Ando Ki, Application Design using Core-A Processor (Core-A 프로세서를 활용한 응용 설계), HongReung Publishing, 2011.
 
-##### 6.2.3.1 FAT file system
+##### 6.3.3.1 FAT file system
 <img src="doc/images/corea-fat.jpg" width="500"/>
 
-##### 6.2.3.2 uC/OS-II application
+##### 6.3.3.2 uC/OS-II application
 <img src="doc/images/corea-ucos.jpg" width="500"/>
 
-##### 6.2.3.3 FreeRTOS application
+##### 6.3.3.3 FreeRTOS application
 <img src="doc/images/corea-freertos.jpg" width="500"/>
 
-##### 6.2.3.4 JPEG application
+##### 6.3.3.4 JPEG application
 <img src="doc/images/corea-jpeg.jpg" width="500"/>
 
-##### 6.2.3.5 MP3 application
+##### 6.3.3.5 MP3 application
 <img src="doc/images/corea-mp3.jpg" width="500"/>
 
-##### 6.2.3.6 Webserver application
+##### 6.3.3.6 Webserver application
 <img src="doc/images/corea-webserver.jpg" width="500"/>
 
 ---
+# 7. Other things<a name="other_things"></a>
 
-# Other things
-
-### Autor(s)
-* **[Ando Ki](mailto:andoki@gmail.com)** - *Initial work* - <a href="http://www.future-ds.com" target="_blank">Future Design Systems</a>
+### Author(s)
+ * **Ando Ki** - *Initial work* - <a href="http://www.future-ds.com" target="_blank">Future Design Systems</a>
 
 ### Acknowledgments
 Thanks to all who gave me valuable feedback.
 
 ### Revision history<a name="revision_history"></a>
-* 2021.07.10: 'gen_amba_axi' option changed.
-* 2021.07.01: AMBA AXI4 feature applied, in which WID[..] removed.
-* 2021.06.01: M\?\_MID[..] removed.
-* 2021.06.01: '-axi3' option added in order to force to use AMBA AXI3 instead of AXI4.
-* Long times ago: Started by Ando Ki (adki at gmail.com).
+ * 2021.09.05: Bug-fixed: 'ADDR_BASE' parameter updated to support address wider than 32-bit in 'gen_axi_top.sh'.
+ * 2021.09.05: Bug-fixed: address range parameters changed from "32'h???" to "'h???" to support wider address width.
+ * 2021.07.10: 'gen_amba_axi' option changed.
+ * 2021.07.01: AMBA AXI4 feature applied, in which WID[..] removed.
+ * 2021.06.01: M\?\_MID[..] removed.
+ * 2021.06.01: '--axi3' option added in order to force to use AMBA AXI3 instead of AXI4.
+ * A long time ago: Started by Ando Ki (adki(at)gmail.com).
+---

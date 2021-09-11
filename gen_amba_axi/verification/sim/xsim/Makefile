@@ -1,10 +1,9 @@
 #------------------------------------------------------------------
 # Copyright (c) 2021 by Ando Ki.
 # All right reserved.
-#
-# This code is distributed in the hope that it will
-# be useful to understand Ando Ki's work,
-# but WITHOUT ANY WARRANTY.
+# This is licensed with the 2-clause BSD license to make the program and
+# library useful in open and closed source products independent of their
+# licensing scheme.
 #------------------------------------------------------------------
 SHELL		= /bin/sh
 MAKEFILE	= Makefile
@@ -20,9 +19,9 @@ WORK	= work
 TOP	= top
 #--------------------------------------------------------
 GUI    ?= 0
-MST    ?= 2
+MST    ?= 3
 SLV    ?= 2
-SIZE   ?= 0
+SIZE   ?= "(4*1024*1024)"
 GEN_BUS = ../../../gen_amba_axi
 GEN_TOP = ../../gen_axi_top.sh
 BUS_V   = ../../design/amba_axi_m$(MST)s$(SLV).v
@@ -36,13 +35,16 @@ make_bus:
 	@if [ ! -x $(GEN_BUS) ]; then make -C ../../..; fi
 	@if [ ! -x $(GEN_BUS) ]; then echo "Something wrong"; exit -1; fi
 	@if [ ! -d ../../design ]; then mkdir ../../design; fi
+	@if [   -f $(BUS_V) ]; then /bin/rm -f $(BUS_V); fi
 	$(GEN_BUS) --master=$(MST) --slave=$(SLV) --output=$(BUS_V)
+	@if [ ! -r $(BUS_V) ]; then echo "Couldn't generate $(BUS_V)"; fi
 
 make_top:
 	@if [ ! -x $(GEN_TOP) ]; then echo "Cannot find $(GEN_TOP)"; exit -1; fi
 	@if [ ! -d ../../design ]; then mkdir ../../design; fi
+	@if [   -f $(TOP_V) ]; then /bin/rm -f $(TOP_V); fi
 	$(GEN_TOP) -mst $(MST) -slv $(SLV) -siz $(SIZE) -out $(TOP_V)
-	@if [ ! -r $(TOP_V) ]; then echo "Couldn't generate top.v"; fi
+	@if [ ! -r $(TOP_V) ]; then echo "Couldn't generate $(TOP_V)"; fi
 
 xlib:
 	@if [ -d $(WORK) ]; then /bin/rm -rf $(WORK); fi
@@ -55,7 +57,7 @@ compile:
         	$(BUS_V)\
         	$(TOP_V)
 
-elab:
+elab: compile
 	xelab -debug typical top -s top
 
 sim: elab
@@ -63,6 +65,7 @@ sim: elab
 		xsim top -gui\
 			-testplusarg SINGLE_TEST=1\
 			-testplusarg BURST_TEST=1\
+		  	-testplusarg BURST_RANDOM_TEST=2\
 			-testplusarg BURST_MISALIGNED_TEST=1\
 			-testplusarg SINGLE_TEST_MEM=1\
 			-testplusarg BURST_TEST_MEM=1\
@@ -71,11 +74,19 @@ sim: elab
 		xsim top -t xsim_run.tcl\
 			-testplusarg SINGLE_TEST=1\
 			-testplusarg BURST_TEST=1\
+			-testplusarg BURST_RANDOM_TEST=2\
 			-testplusarg BURST_MISALIGNED_TEST=1\
 			-testplusarg SINGLE_TEST_MEM=1\
 			-testplusarg BURST_TEST_MEM=1\
-			-testplusarg MULTIPLE_OUTSTANDING=1;\
+			;\
 	fi
+#-testplusarg SINGLE_TEST=1\
+#-testplusarg BURST_TEST=1\
+#-testplusarg BURST_RANDOM_TEST=2\
+#-testplusarg BURST_MISALIGNED_TEST=1\
+#-testplusarg SINGLE_TEST_MEM=1\
+#-testplusarg BURST_TEST_MEM=1\
+#-testplusarg MULTIPLE_OUTSTANDING=1;\
 
 #--------------------------------------------------------
 clean:
@@ -102,6 +113,6 @@ cleanup clobber: clean
 	/bin/rm -f $(TOP_V)
 
 cleanupall: cleanup
-	/bin/rm -f ../../design/amba_ahb_m*s*.v
+	/bin/rm -f $(BUS_V)
 
 #--------------------------------------------------------

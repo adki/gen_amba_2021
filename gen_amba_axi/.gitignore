@@ -1,8 +1,9 @@
 # Refer to results by searching ".gitignore templates"
 
+old
+obj
 amba_axi_m*s*.v
 gen_amba_axi
-doc/old
 src.old
 src.old*
 verification.old

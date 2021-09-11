@@ -79,12 +79,8 @@ vpath %.h	$(H_DIR)
 vpath %.c	$(C_DIR)
 
 #-------------------------------------------------------------
-ifndef OBJECTDIR
-  OBJECTDIR = obj
-endif
-ifeq (${wildcard $(OBJECTDIR)},)
-  DUMMY := ${shell mkdir $(OBJECTDIR)}
-endif
+OBJECTDIR = obj
+DUMMY      := $(shell [ -d $(OBJECTDIR) ] || mkdir $(OBJECTDIR) )
 
 #-------------------------------------------------------------
 $(OBJECTDIR)/%.o: %.c
@@ -106,16 +102,34 @@ install: $(TARGET)
 	chmod +x $(INSTD)/$(TARGET)
 
 #-------------------------------------------------------------
+DIRS	= $(subst /,, $(dir $(wildcard */Makefile)))
+
 clean:
 	-rm -fr $(OBJECTDIR)
 	-rm -fr ./Debug
 	-rm -f *.stackdump
 	-rm -f compile.log
 	-rm -f *.v
+	for D in $(DIRS); do\
+		if [ -f $$D/Makefile ] ; then \
+			echo "make -C $$D -s $@";\
+			make -C $$D -s $@;\
+		fi;\
+	done
 
-cleanup: clean
+cleanup clobber: clean
 	-rm -f $(TARGET) $(TARGET).exe
+	for D in $(DIRS); do\
+		if [ -f $$D/Makefile ] ; then \
+			echo "make -C $$D -s $@";\
+			make -C $$D -s $@;\
+		fi;\
+	done
 
-clobber: cleanup
-
-cleanupall: cleanup
+cleanupall distclean: cleanup
+	for D in $(DIRS); do\
+		if [ -f $$D/Makefile ] ; then \
+			echo "make -C $$D -s $@";\
+			make -C $$D -s $@;\
+		fi;\
+	done

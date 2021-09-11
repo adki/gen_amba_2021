@@ -26,8 +26,6 @@ fprintf(fo, "//-----------------------------------------------------------------
 fprintf(fo, "module %saxi_mtos_m%d\n", prefix, num);
 fprintf(fo, "       #(parameter SLAVE_ID     =0    // for reference\n");
 fprintf(fo, "                 , SLAVE_EN     =1'b1 // the slave is available when 1\n");
-fprintf(fo, "                 , ADDR_BASE    =32'h0000_0000\n");
-fprintf(fo, "                 , ADDR_LENGTH  =12 // effective addre bits\n");
 fprintf(fo, "                 , WIDTH_CID    =4  // Channel ID width in bits\n");
 fprintf(fo, "                 , WIDTH_ID     =4  // ID width in bits\n");
 fprintf(fo, "                 , WIDTH_AD     =32 // address width\n");
@@ -45,6 +43,8 @@ fprintf(fo, "                 , WIDTH_ARUSER =1 // read-address user path\n");
 fprintf(fo, "                 `endif\n");
 fprintf(fo, "                 , NUM_MASTER   =%d    // number of master\n", num);
 fprintf(fo, "                 , SLAVE_DEFAULT=1'b0  // default-salve when 1\n");
+fprintf(fo, "                 , ADDR_LENGTH  =12 // effective addre bits\n");
+fprintf(fo, "        ,parameter [WIDTH_AD-1:0] ADDR_BASE={WIDTH_AD{1'b0}}\n");
 fprintf(fo, "        )\n");
 fprintf(fo, "(\n");
 fprintf(fo, "       input   wire                      ARESETn\n");

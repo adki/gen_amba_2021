@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #-------------------------------------------------------------------------------
 # Copyright (c) 2018-2019-2021 by Ando Ki (andoki@gmail.com)
+# This is licensed with the 2-clause BSD license to make the program and
+# library useful in open and closed source products independent of their
+# licensing scheme.
 #-------------------------------------------------------------------------------
 # gen_axi_top.sh -- Top-level generator for AMBA AXI system
 #-------------------------------------------------------------------------------
@@ -167,7 +170,7 @@ module top;
    //---------------------------------------------------------------------------
    localparam NUM_MST=${NUM_MST}
             , NUM_SLV=${NUM_SLV};
-   localparam WIDTH_CID   = clogb2(NUM_MST) // Channel ID width in bits
+   localparam WIDTH_CID   = \$clog2(NUM_MST) // Channel ID width in bits
             , WIDTH_ID    = 4    // ID width in bits
             , WIDTH_AD    =\`WIDTH_AD    // address width
             , WIDTH_DA    =\`WIDTH_DA    // data width
@@ -196,10 +199,10 @@ EOT
    eval sizeX=`echo "ibase=10;obase=16;${NUM_BYTES}"|bc`
    while [ ${cnt_slv} -lt ${NUM_SLV} ]; do
        eval startX=`echo "ibase=10;obase=16;$[${cnt_slv}*${NUM_BYTES}]"|bc`
-echo "   localparam ADDR_BASE${cnt_slv}=32'h${startX}; // address base for memory"
+echo "   localparam [WIDTH_AD-1:0] ADDR_BASE${cnt_slv}='h${startX}; // address base for memory"
        eval cnt_slv=$[${cnt_slv}+1]
    done
-echo "   localparam ADDR_LENGTH=clogb2('h${sizeX}); // address length for each memory"
+echo "   localparam ADDR_LENGTH=\$clog2('h${sizeX}); // address length for each memory"
 cat << EOT
    //---------------------------------------------------------------------------
    localparam CLK_PERIOD_HALF=1_000_000_000/(\`CLK_FREQ*2);
@@ -768,15 +771,6 @@ cat << EOT
       \`endif
    end
    //---------------------------------------------------------------------------
-   function integer clogb2;
-      input integer number;
-   begin
-         clogb2=0;
-         while(2**clogb2<number) begin
-            clogb2=clogb2+1;
-         end
-   end
-   endfunction // clogb2
 endmodule
 EOT
 exec 1>&3 3>&-
@@ -784,6 +778,7 @@ exec 1>&3 3>&-
 #-------------------------------------------------------------------------------
 # Revision history:
 #
+# 2021.09.05: 'clogb2()' replace with '$clog2()'
 # 2021.06.01: 'axi3' option added
 # 2019.06.20: AMBA_AXI_AW/W/B/AR/RUSER
 # 2018.07.19: Started by Ando Ki (adki@future-ds.com)

@@ -10,5 +10,8 @@ clean cleanup clobber cleanupall:
 			make -C $$D -s $@;\
 		fi;\
 	done
+	@if [ -f ip/test_axi4to3to4/Makefile ] ; then \
+		make -C ip/test_axi4to3to4 $@;\
+	fi
 
 .PHONY: all clean cleanup clobber cleanupall

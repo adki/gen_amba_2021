@@ -1,0 +1,18 @@
+main.c
+    |
+    +--arg_parser.c
+    |
+    +--gen_axi_amba.c (amba_axi_mnsn)
+           |
+           +--gen_axi_arbiter_mtos.c (ax_arbiter_mtos_mn)
+           |
+           +--gen_axi_arbiter_stom.c (axi_arbiter_stom_sn)
+           |
+           +--gen_axi_mtos.c (axi_mtos_mn)
+           |
+           +--gen_axi_stom.c (axi_stom_sn)
+           |
+           +--gen_axi_default_slave.c (axi_default_slave)
+
+gen_axi_utils.c
+gen_axi_utils.h

@@ -1,9 +1,9 @@
 //----------------------------------------------------------------
-//  Copyright (c) 2018-2021 by Ando Ki.
-//  All right reserved.
-//  http://www.future-ds.com
-//  All rights are reserved by Ando Ki.
-//  Do not use in any means or/and methods without Ando Ki's permission.
+// Copyright (c) 2018-2021 by Ando Ki.
+// All right reserved.
+// This is licensed with the 2-clause BSD license to make the program and
+// library useful in open and closed source products independent of their
+// licensing scheme.
 //----------------------------------------------------------------
 // axi_tester.v
 //----------------------------------------------------------------
@@ -115,18 +115,17 @@ module axi_tester
      //-----------------------------------------------------------
      reg done=1'b0;
      //-----------------------------------------------------------
-     reg [WIDTH_DA-1:0] dataR[0:1023];
-     reg [WIDTH_DA-1:0] dataW[0:1023];
+     reg [WIDTH_DA-1:0] dataR[0:1023]; // non-justified data
+     reg [WIDTH_DA-1:0] dataW[0:1023]; // non-justified data
      `include "axi_master_tasks.v"
      `include "mem_test_tasks.v"
      //-----------------------------------------------------------
      integer arg; // for commandline test plus arguments
-     reg [15:0] bnum ; initial bnum  = 0;
-     reg [15:0] blen ; initial blen  = 0;
-     reg        delay; initial delay = 0;
-     reg [31:0] saddr, depth;
+     reg [15:0]         bnum ; initial bnum  = 0;
+     reg [15:0]         blen ; initial blen  = 0;
+     reg                delay; initial delay = 0;
+     reg [WIDTH_AD-1:0] saddr, depth;
      integer    stage;
-   //integer    nm, ns, stage;
      integer    idx;
      //-----------------------------------------------------------
      initial begin
@@ -182,6 +181,7 @@ module axi_tester
            //-----------------------------------------------------
 if (EN==1) begin
 if ($value$plusargs("SINGLE_TEST=%d", arg) && arg) begin
+           $display("SINGLE_TEST================");
            stage = 1;
            busy_out = 1'b1;
            saddr = SIZE_IN_BYTES*P_MST_ID;
@@ -193,17 +193,43 @@ if ($value$plusargs("SINGLE_TEST=%d", arg) && arg) begin
            while (busy_in==1'b1) @ (posedge ACLK);
 end
 if ($value$plusargs("BURST_TEST=%d", arg) && arg) begin
+           $display("BURST_TEST================");
            stage = 2;
            busy_out = 1'b1;
            saddr = SIZE_IN_BYTES*P_MST_ID; //saddr = ((P_MST_ID-1)<<ADDR_LENGTH);
+           `ifdef AMBA_AXI4
+           for (blen=1; blen<=256; blen=blen*2) begin
+           `else
            for (blen=1; blen<=16; blen=blen+1) begin
-                test_burst (saddr, 4, blen, 2'b01, delay, 0);
+           `endif
+              for (bnum=1; bnum<=WIDTH_DS; bnum=bnum*2) begin
+                test_burst (saddr, bnum, blen, 2'b01, delay, 0);
+               end
+           end
+           busy_out = 1'b0;
+           @ (posedge ACLK);
+           while (busy_in==1'b1) @ (posedge ACLK);
+end
+if ($value$plusargs("BURST_RANDOM_TEST=%d", arg) && arg) begin
+           $display("BURST_RANDOM_TEST================");
+           stage = 2;
+           busy_out = 1'b1;
+           saddr = SIZE_IN_BYTES*P_MST_ID; //saddr = ((P_MST_ID-1)<<ADDR_LENGTH);
+           `ifdef AMBA_AXI4
+           for (blen=1; blen<=256; blen=blen*2) begin
+           `else
+           for (blen=1; blen<=16; blen=blen+1) begin
+           `endif
+               for (bnum=1; bnum<=WIDTH_DS; bnum=bnum*2) begin
+                test_burst (saddr, bnum, blen, 2'b01, delay, arg+1);
+               end
            end
            busy_out = 1'b0;
            @ (posedge ACLK);
            while (busy_in==1'b1) @ (posedge ACLK);
 end
 if ($value$plusargs("BURST_MISALIGNED_TEST=%d", arg) && arg) begin
+           $display("BURST_MISALIGNED_TEST================");
            stage = 3;
            busy_out = 1'b1;
            saddr = SIZE_IN_BYTES*P_MST_ID; //saddr = ((P_MST_ID-1)<<ADDR_LENGTH);
@@ -225,6 +251,7 @@ if (0) begin
            //test_error('h1000_0000, delay);
 end
 if ($value$plusargs("SINGLE_TEST_MEM=%d", arg) && arg) begin
+           $display("SINGLE_TEST_MEM %d ================", arg);
            stage = 4;
            busy_out = 1'b1;
            depth = 'h10;
@@ -235,6 +262,7 @@ if ($value$plusargs("SINGLE_TEST_MEM=%d", arg) && arg) begin
            while (busy_in==1'b1) @ (posedge ACLK);
 end
 if ($value$plusargs("SINGLE_TEST_MEM=%d", arg) && arg) begin
+           $display("SINGLE_TEST_MEM %d ================", arg);
            stage = 5;
            busy_out = 1'b1;
            depth = 'h10;
@@ -247,6 +275,7 @@ if ($value$plusargs("SINGLE_TEST_MEM=%d", arg) && arg) begin
            while (busy_in==1'b1) @ (posedge ACLK);
 end
 if ($value$plusargs("BURST_TEST_MEM=%d", arg) && arg) begin
+           $display("BURST_TEST_MEM %d ================", arg);
            stage = 6;
            busy_out = 1'b1;
            depth = 4*16*4;
@@ -262,6 +291,7 @@ if ($value$plusargs("BURST_TEST_MEM=%d", arg) && arg) begin
            while (busy_in==1'b1) @ (posedge ACLK);
 end
 if ($value$plusargs("MULTIPLE_OUTSTANDING=%d", arg) && arg) begin
+     $display("MULTIPLE_OUTSTANDING %d ================", arg);
      busy_out = 1'b1;
      saddr = SIZE_IN_BYTES*P_MST_ID;
      axi_master_write_multiple_outstanding(
@@ -294,6 +324,7 @@ end // if (EN==1
            CACTIVE = 1'b0;
            //-----------------------------------------------------
            done = 1'b1;
+           //$display("AXI statistics ===========================");
            axi_statistics(P_MST_ID);
      end
      //-----------------------------------------------------------

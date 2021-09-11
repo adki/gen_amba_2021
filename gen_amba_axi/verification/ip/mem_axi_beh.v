@@ -1,6 +1,8 @@
 //------------------------------------------------------------------------------
-//  Copyright (c) 2021 by Future Design Systems.
-//  http://www.future-ds.com
+// Copyright (c) 2021 by Ando Ki.
+// This is licensed with the 2-clause BSD license to make the program and
+// library useful in open and closed source products independent of their
+// licensing scheme.
 //------------------------------------------------------------------------------
 // mem_axi_beh.v
 //------------------------------------------------------------------------------

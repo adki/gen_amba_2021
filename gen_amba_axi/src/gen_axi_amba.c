@@ -58,7 +58,7 @@ int gen_axi_amba_core( unsigned int numM // num of masters
                      , FILE *fo)
 {
     int i, j, k;
-    unsigned int start=0x00000000;
+    unsigned long long start=0x0L;
 
     if ((numM<2)||(numS<2)||(module==NULL)||(prefix==NULL)) return 1;
 
@@ -66,7 +66,7 @@ fprintf(fo, "//-----------------------------------------------------------------
 fprintf(fo, "module %s\n", module);
 fprintf(fo, "      #(parameter NUM_MASTER  = %d  // should not be changed\n", numM);
 fprintf(fo, "                , NUM_SLAVE   = %d  // should not be changed\n", numS);
-fprintf(fo, "                , WIDTH_CID   = clogb2(NUM_MASTER) // Channel ID width in bits\n");
+fprintf(fo, "                , WIDTH_CID   = $clog2(NUM_MASTER) // Channel ID width in bits\n");
 fprintf(fo, "                , WIDTH_ID    = 4 // ID width in bits\n");
 fprintf(fo, "                , WIDTH_AD    =32 // address width\n");
 fprintf(fo, "                , WIDTH_DA    =32 // data width\n");
@@ -88,8 +88,11 @@ fprintf(fo, "                `ifdef AMBA_AXI_RUSER\n");
 fprintf(fo, "                , WIDTH_RUSER = 1 // read-data user path\n");
 fprintf(fo, "                `endif\n");
 for (i=0; i<numS; i++) {
-fprintf(fo, "                , SLAVE_EN%d   = 1 , ADDR_BASE%d  =32'h%08X , ADDR_LENGTH%d=12 // effective addre bits\n", i, i, start, i);
-start += 0x2000;
+fprintf(fo, "                , SLAVE_EN%d=1, ADDR_LENGTH%d=12 // effective address bits-widgh\n", i, i);
+}
+for (i=0; i<numS; i++) {
+fprintf(fo, "       ,parameter [WIDTH_AD-1:0] ADDR_BASE%d='h%0llX\n", i, start);
+start += 0x2000L;
 }
 fprintf(fo, "       )\n");
 fprintf(fo, "(\n");
@@ -120,12 +123,12 @@ fprintf(fo, "     wire  [WIDTH_CID-1:0]     M%d_MID=%d'd%d;\n", i, logb2(numM), 
 }
 if (axi4) {
 for (i=0; i<numM; i++) {
-fprintf(fo, "     (* makr_debug=\"true\" *)wire  [WIDTH_ID-1:0]      M%d_WID;\n", i);
+fprintf(fo, "     wire  [WIDTH_ID-1:0]      M%d_WID;\n", i);
 }
 for (i=0; i<numS; i++) {
-fprintf(fo, "     (* makr_debug=\"true\" *)wire  [WIDTH_SID-1:0]     S%d_WID;\n", i);
+fprintf(fo, "     wire  [WIDTH_SID-1:0]     S%d_WID;\n", i);
 }
-fprintf(fo, "     (* makr_debug=\"true\" *)wire  [WIDTH_SID-1:0]     SD_WID;\n");
+fprintf(fo, "     wire  [WIDTH_SID-1:0]     SD_WID;\n");
 }
 fprintf(fo, "     //-----------------------------------------------------------\n");
 gen_axi_signal( "SD_", axi4, fo );
@@ -389,13 +392,13 @@ fprintf(fo, "          , .RVALID   (SD_RVALID  )\n");
 fprintf(fo, "          , .RREADY   (SD_RREADY  )\n");
 fprintf(fo, "     );\n");
 
-fprintf(fo, "    function integer clogb2;\n");
-fprintf(fo, "    input [31:0] value;\n");
-fprintf(fo, "    begin\n");
-fprintf(fo, "      value = value - 1;\n");
-fprintf(fo, "      for (clogb2=0; value>0; clogb2=clogb2+1) value = value>>1;\n");
-fprintf(fo, "    end\n");
-fprintf(fo, "    endfunction\n");
+//fprintf(fo, "    function integer clogb2;\n");
+//fprintf(fo, "    input [31:0] value;\n");
+//fprintf(fo, "    begin\n");
+//fprintf(fo, "      value = value - 1;\n");
+//fprintf(fo, "      for (clogb2=0; value>0; clogb2=clogb2+1) value = value>>1;\n");
+//fprintf(fo, "    end\n");
+//fprintf(fo, "    endfunction\n");
 
 if (axi4) {
 fprintf(fo, "     //-----------------------------------------------------------\n");

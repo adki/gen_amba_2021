@@ -1,10 +1,11 @@
 `ifndef AXI_MASTER_TASKS_V
 `define AXI_MASTER_TASKS_V
 //----------------------------------------------------------------
-//  Copyright (c) 2010-2020-2021 by Ando Ki.
-//  All right reserved.
-//  http://www.future-ds.com
-//  All rights are reserved by Ando Ki.
+// Copyright (c) 2010-2020-2021 by Ando Ki.
+// All right reserved.
+// This is licensed with the 2-clause BSD license to make the program and
+// library useful in open and closed source products independent of their
+// licensing scheme.
 //----------------------------------------------------------------
 // axi_master_tasks.v
 //----------------------------------------------------------------
