@@ -48,7 +48,7 @@ xlib:
 	@if [ -d $(WORK) ]; then /bin/rm -rf $(WORK); fi
 
 compile:
-	xvlog -i ../../design -i ../../ip\
+	xvlog -sv -i ../../design -i ../../ip\
         	./sim_define.v\
         	../../ip/ahb_tester.v\
         	../../ip/mem_ahb.v\

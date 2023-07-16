@@ -19,7 +19,7 @@
 	//------------------
         reg [1:0] status;
         integer i, error, seed;
-        reg [31:0] mask, dataW, dataR, expect;
+        reg [31:0] mask, dataW, dataR, expectX;
    begin
             error = 0;
             seed = 7;
@@ -30,7 +30,7 @@
                 ahb_read(i, dataR, size, status); // dataR is justified
                 dataR = dataR&mask;
                 if (dataW!==dataR) begin
-                   $display("[%04d] %m A:%x D:%x, but %x expected", $time, i, dataR, dataW);
+                   $display("[%04d] %m A:%x D:%x, but %x expectXed", $time, i, dataR, dataW);
                    error = error+1;
                 end
             end
@@ -48,9 +48,9 @@
             for (i=start; i<(finish-size+1); i=i+size) begin
                 ahb_read(i, dataR, size, status); // dataR is justified
                 dataR = dataR&mask;
-                expect = {$random(seed)}&mask; // seed will be updated
-                if (dataR!==expect) begin
-                   $display("[%04d] %m A:%x D:%x, but %x expected", $time, i, dataR, expect);
+                expectX = {$random(seed)}&mask; // seed will be updated
+                if (dataR!==expectX) begin
+                   $display("[%04d] %m A:%x D:%x, but %x expectXed", $time, i, dataR, expectX);
                    error = error+1;
                 end
             end
@@ -68,7 +68,7 @@
         input [ 7:0] leng;  // burst length
         integer i, j, error, seed;
         reg [ 1:0] status;
-        reg [31:0] expect;
+        reg [31:0] expectX;
         reg [ 2:0] hburst;
    begin
           case (leng)
@@ -91,11 +91,11 @@
                  @ (posedge HCLK);
                  ahb_read_burst(i, hburst, status);
                  for (j=0; j<leng; j=j+1) begin
-                     expect = $random(seed);
-                     if (data_burst_read[j] != expect) begin
+                     expectX = $random(seed);
+                     if (data_burst_read[j] != expectX) begin
                         error = error+1;
-                        $display("%m A=%hh D=%hh, but %hh expected",
-                                i+j*leng, data_burst_read[j], expect);
+                        $display("%m A=%hh D=%hh, but %hh expectXed",
+                                i+j*leng, data_burst_read[j], expectX);
                      end
                  end
                  @ (posedge HCLK);

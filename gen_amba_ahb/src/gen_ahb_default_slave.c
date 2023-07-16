@@ -1,11 +1,11 @@
 //--------------------------------------------------------
-// Copyright (c) 2016 by Ando Ki.
+// Copyright (c) 2016-2023 by Ando Ki.
 // All right reserved.
 //
 // adki@future-ds.com
 // andoki@gmail.com
 //--------------------------------------------------------
-// VERSION: 2016.03.26.
+// VERSION: 2023.07.16.
 //--------------------------------------------------------
 // default slave for AMBA AHB
 //--------------------------------------------------------
@@ -25,9 +25,9 @@ static char *code[] = {
 ,"     , input   wire  [ 2:0] HBURST"
 ,"     , input   wire  [31:0] HWDATA"
 ,"     , output  wire  [31:0] HRDATA"
-,"     , output  reg   [ 1:0] HRESP=2'b01"
+,"     , output  reg   [ 1:0] HRESP"
 ,"     , input   wire         HREADYin"
-,"     , output  reg          HREADYout=1'b1"
+,"     , output  reg          HREADYout"
 ,");"
 ,"   assign HRDATA = 32'h0;"
 ,"   localparam STH_IDLE   = 2'h0"
@@ -107,5 +107,6 @@ fprintf(fo, "//-----------------------------------------------------------------
 //--------------------------------------------------------
 // Revision history:
 //
+// 2023.07.16: default value for 'output reg' removed.
 // 2016.03.26: Started by Ando Ki.
 //--------------------------------------------------------

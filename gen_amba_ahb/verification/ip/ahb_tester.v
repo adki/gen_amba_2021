@@ -21,16 +21,16 @@ module ahb_tester
 (
        input   wire        HRESETn
      , input   wire        HCLK
-     , output  reg         HBUSREQ=1'b0
+     , output  reg         HBUSREQ
      , input   wire        HGRANT
-     , output  reg  [31:0] HADDR=32'h0
-     , output  reg  [ 3:0] HPROT=4'h0
-     , output  reg         HLOCK=1'b0
-     , output  reg  [ 1:0] HTRANS=2'b0
-     , output  reg         HWRITE=1'b0
-     , output  reg  [ 2:0] HSIZE=3'h0
-     , output  reg  [ 2:0] HBURST=3'h0
-     , output  reg  [31:0] HWDATA=32'h0
+     , output  reg  [31:0] HADDR
+     , output  reg  [ 3:0] HPROT
+     , output  reg         HLOCK
+     , output  reg  [ 1:0] HTRANS
+     , output  reg         HWRITE
+     , output  reg  [ 2:0] HSIZE
+     , output  reg  [ 2:0] HBURST
+     , output  reg  [31:0] HWDATA
      , input   wire [31:0] HRDATA
      , input   wire [ 1:0] HRESP
      , input   wire        HREADY

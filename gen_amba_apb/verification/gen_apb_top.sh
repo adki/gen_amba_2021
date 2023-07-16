@@ -324,6 +324,11 @@ cat << EOT
 EOT
 
 echo "\`define AMBA_AXI4"
+echo "\`ifdef AMBA_AXI4"
+echo "\`define AMBA_QOS"
+echo "\`else"
+echo "\`undef AMBA_QOS"
+echo "\`endif"
 
 cat << EOT
 module top;

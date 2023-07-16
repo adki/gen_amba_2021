@@ -1,11 +1,11 @@
 //--------------------------------------------------------
-// Copyright (c) 2016 by Ando Ki.
+// Copyright (c) 2016-2023 by Ando Ki.
 // All right reserved.
 //
 // adki@future-ds.com
 // andoki@gmail.com
 //--------------------------------------------------------
-// VERSION: 2016.03.26.
+// VERSION: 2023.07.16
 //--------------------------------------------------------
 // Arbiter for AMBA AHB
 //--------------------------------------------------------
@@ -16,11 +16,11 @@ static char *code[] = {
 ,"       input   wire               HRESETn"
 ,"     , input   wire               HCLK"
 ,"     , input   wire [NUMM-1:0]    HBUSREQ // 0: highest priority"
-,"     , output  reg  [NUMM-1:0]    HGRANT={NUMM{1'b0}}"
-,"     , output  reg  [     3:0]    HMASTER=4'h0"
+,"     , output  reg  [NUMM-1:0]    HGRANT"
+,"     , output  reg  [     3:0]    HMASTER"
 ,"     , input   wire [NUMM-1:0]    HLOCK"
 ,"     , input   wire               HREADY"
-,"     , output  reg                HMASTLOCK=1'b0"
+,"     , output  reg                HMASTLOCK"
 ,"     , input   wire [16*NUMS-1:0] HSPLIT"
 ,");"
 ,"   reg  [NUMM-1:0] hmask={NUMM{1'b0}}; // 1=mask-out"
@@ -41,7 +41,7 @@ static char *code[] = {
 ,"       case (state)"
 ,"       ST_READY: begin"
 ,"          if (HBUSREQ!=0) begin"
-,"              HGRANT  <= priority(HBUSREQ);"
+,"              HGRANT  <= func_priority(HBUSREQ);"
 ,"              hmask   <= 'h0;"
 ,"              state   <= ST_STAY;"
 ,"          end"
@@ -53,10 +53,10 @@ static char *code[] = {
 ,"              state  <= ST_READY;"
 ,"          end else if (HBUSREQ[id]==1'b0) begin"
 ,"              if ((HBUSREQ&~hmask)=='b0) begin"
-,"                  HGRANT <= priority(HBUSREQ);"
+,"                  HGRANT <= func_priority(HBUSREQ);"
 ,"                  hmask  <= 'h0;"
 ,"              end else begin"
-,"                  HGRANT    <= priority(HBUSREQ&~hmask);"
+,"                  HGRANT    <= func_priority(HBUSREQ&~hmask);"
 ,"                  hmask[id] <= 1'b1;"
 ,"              end"
 ,"          end"
@@ -68,7 +68,7 @@ static char *code[] = {
 ,"       endcase"
 ,"   end // if"
 ,"   end // always"
-,"   function [NUMM-1:0] priority;"
+,"   function [NUMM-1:0] func_priority;"
 ,"     input  [NUMM-1:0] req;"
 ,"     reg    [15:0] val;"
 ,"   begin"
@@ -91,9 +91,9 @@ static char *code[] = {
 ,"     16'b1000_0000_0000_0000: val = 'h8000;"
 ,"     default: val = 'h0000;"
 ,"     endcase"
-,"     priority = val[NUMM-1:0];"
+,"     func_priority = val[NUMM-1:0];"
 ,"   end"
-,"   endfunction // priority"
+,"   endfunction // func_priority"
 ,"   function [3:0] encoder;"
 ,"     input  [NUMM-1:0] req;"
 ,"   begin"
@@ -160,5 +160,6 @@ fprintf(fo, "//-----------------------------------------------------------------
 //--------------------------------------------------------
 // Revision history:
 //
+// 2023.07.16: 'priority' --> 'func_priority' due to SystemVerilog keyword.
 // 2016.03.26: Started by Ando Ki.
 //--------------------------------------------------------

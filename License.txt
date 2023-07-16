@@ -1,0 +1,6 @@
+Copyright (c) 2021-2023 by Ando Ki.
+All rights are reserved by Ando Ki.
+
+This contents and its associated materials are licensed with the 2-clause BSD license to make the program and library useful in open and closed source products independent of their licensing scheme. Each contributor holds copyright over their respective contribution.
+
+All contents are provided as it is WITHOUT ANY WARRANTY and NO TECHNICAL SUPPORT will be provided for problems that might arise.

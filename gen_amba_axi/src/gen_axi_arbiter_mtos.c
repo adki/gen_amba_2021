@@ -159,13 +159,13 @@ static char *code[] = {
 ,"   always @(negedge clk or negedge rstn) begin"
 ,"      if (rstn&&!clr) begin"
 ,"          if ((item_cnt==0)&&(!empty))"
-,"             $display(\"%04d %m: empty flag mis-match: %d\", $time, item_cnt);"
+,"             $display(\"%0t %m: empty flag mis-match: %d\", $time, item_cnt);"
 ,"          if ((item_cnt==FDT)&&(!full))"
-,"             $display(\"%04d %m: full flag mis-match: %d\", $time, item_cnt);"
+,"             $display(\"%0t %m: full flag mis-match: %d\", $time, item_cnt);"
 ,"          if (item_cnt>FDT)"
-,"             $display(\"%04d %m: fifo handling error: item_cnt>FDT %d:%d\", $time, item_cnt, FDT);"
+,"             $display(\"%0t %m: fifo handling error: item_cnt>FDT %d:%d\", $time, item_cnt, FDT);"
 ,"          if ((item_cnt+room_cnt)!=FDT)"
-,"             $display(\"%04d %m: count mis-match: item_cnt:room_cnt %d:%d\", $time, item_cnt, room_cnt);"
+,"             $display(\"%0t %m: count mis-match: item_cnt:room_cnt %d:%d\", $time, item_cnt, room_cnt);"
 ,"      end"
 ,"   end"
 ,"   `endif"
@@ -341,7 +341,7 @@ fprintf(fo, "                         stateAW <= STAW_LOCK;\n");
 fprintf(fo, "                     end else begin\n");
 fprintf(fo, "                         // synopsys translate_off\n");
 fprintf(fo, "                         `ifdef RIGOR\n");
-fprintf(fo, "                         $display(\"%%04d %%m ERROR un-expected write-request during lock AWID(0x%%2x) from MID(%%3d)\",\n");
+fprintf(fo, "                         $display(\"%%0t %%m ERROR un-expected write-request during lock AWID(0x%%2x) from MID(%%3d)\",\n");
 fprintf(fo, "                                          $time, AWSID0, MID0);\n");
 fprintf(fo, "                         `endif\n");
 fprintf(fo, "                         // synopsys translate_on\n");
@@ -359,7 +359,7 @@ fprintf(fo, "                         stateAW <= STAW_LOCK;\n");
 fprintf(fo, "                     end else begin\n");
 fprintf(fo, "                         // synopsys translate_off\n");
 fprintf(fo, "                         `ifdef RIGOR\n");
-fprintf(fo, "                         $display(\"%%04d %%m ERROR un-expected write-request during lock AWID(0x%%2x) from MID(%%3d)\",\n");
+fprintf(fo, "                         $display(\"%%0t %%m ERROR un-expected write-request during lock AWID(0x%%2x) from MID(%%3d)\",\n");
 fprintf(fo, "                                          $time, AWSID%d, MID%d);\n", i, i);
 fprintf(fo, "                         `endif\n");
 fprintf(fo, "                         // synopsys translate_on\n");
@@ -370,7 +370,7 @@ fprintf(fo, "              end\n");
 fprintf(fo, "              // synopsys translate_off\n");
 fprintf(fo, "              `ifdef RIGOR\n");
 fprintf(fo, "              else begin\n");
-fprintf(fo, "                   $display(\"%%04d %%m ERROR un-expected MID for lock 0x%%x\",\n");
+fprintf(fo, "                   $display(\"%%0t %%m ERROR un-expected MID for lock 0x%%x\",\n");
 fprintf(fo, "                                    $time, locksid[WIDTH_SID-1:WIDTH_ID]);\n");
 fprintf(fo, "              end\n");
 fprintf(fo, "              `endif\n");
@@ -447,7 +447,7 @@ fprintf(fo, "     `ifdef RIGOR\n");
 fprintf(fo, "     always @ (negedge ACLK or negedge ARESETn) begin\n");
 fprintf(fo, "          if (ARESETn==1'b1) begin\n");
 fprintf(fo, "              if (fifo_pop_valid&~|WGRANT) begin\n");
-fprintf(fo, "                  $display(\"%%04d %%m ERROR FIFO valid, but none granted WGRANT\", $time);\n");
+fprintf(fo, "                  $display(\"%%0t %%m ERROR FIFO valid, but none granted WGRANT\", $time);\n");
 fprintf(fo, "              end\n");
 fprintf(fo, "          end\n");
 fprintf(fo, "     end\n");

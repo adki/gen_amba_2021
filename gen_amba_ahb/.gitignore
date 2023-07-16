@@ -2,6 +2,7 @@
 
 gen_amba_ahb
 src.old
+src.old.old
 verification.old
 amba_ahb_m*s*.v
 *.vcd

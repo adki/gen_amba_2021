@@ -19,5 +19,10 @@
 `undef  AMBA_AXI_CACHE
 `undef  AMBA_AXI_PROT
 `define BURST_TYPE_WRAPP_ENABLED
+`ifdef AMBA_AXI4
+`define AMBA_QOS
+`else
+`undef  AMBA_QOS
+`endif
 //-----------------------------------------------------------------------
 `endif

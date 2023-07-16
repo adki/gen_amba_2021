@@ -2,8 +2,9 @@
 SHELL		= /bin/sh
 MAKEFILE	= Makefile
 #--------------------------------------------------------
-ILOG	= iverilog
-ISIM	= vvp
+IVERILOG_HOME = /usr/local
+ILOG	= $(IVERILOG_HOME)/bin/iverilog
+ISIM	= $(IVERILOG_HOME)/bin/vvp
 #--------------------------------------------------------
 TOP	= top
 #--------------------------------------------------------
@@ -32,7 +33,7 @@ make_top:
 	@if [ ! -r ../../design/$(TOP).v ]; then echo "Couldn't generate ../../design/$(TOP).v"; fi
 
 compile:
-	($(ILOG) -o $(TOP).vvp -s $(TOP)\
+	($(ILOG) -g2012 -o $(TOP).vvp -s $(TOP)\
                 -I../../design -I../../ip\
                 ./sim_define.v\
                 ../../ip/axi_tester.v\

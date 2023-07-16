@@ -1,10 +1,12 @@
 # GEN_AMBA_2021
-'gen_amba' is a set of programs that generate AMBA bus Verilog-HDL, which include AMBA AXI, AMBA AHB, and AMBA APB.
-* *gen_amba_axi*: AMBA AXI bus generator for multi-master and multi-slave
-* *gen_amba_ahb*: AMBA AHB bus generator for multi-master and multi-slave
-* *gen_amba_apb*: AMBA APB bus-bridge generator for AMBA AXI or AHB
+**gen_amba** is a set of programs that generate ***AMBA bus Verilog-HDL***, which include AMBA AXI, AMBA AHB, and AMBA APB.
+> - *gen_amba_axi*: AMBA AXI bus generator for multi-master and multi-slave
+>> AMBA AXI4 and AXI3
+> - *gen_amba_ahb*: AMBA AHB bus generator for multi-master and multi-slave
+> - *gen_amba_apb*: AMBA APB bus-bridge generator for AMBA AXI or AHB
 
-> Note that it is a new version of 'gen_amba' (https://github.com/adki/gen_amba).
+> Note that it is a new version of 'gen_amba' (https://github.com/adki/gen_amba).<br>
+> Note there are AXI4-to-AXI3 and AXI3-to-AXI4 in *gen_amba_axi/verification/ip'.
 
 ## Table of contents
 
@@ -467,7 +469,7 @@ Source code is available from Ando's GitHub:
 
 # 6. Where it has been used<a name="where_has_been_used"></a>
 
-### 6.1 HW-SW co-simulation
+### 6.1 HW-SW transaction-level co-simulation
 Cosim BFM library is a package to provide HW-SW co-simulation between the HDL (Hardware Description Language) simulator and the host program, where BFM (Bus Functional Model or Bus Functional Module) generates bus transaction by interacting with the host program in C or Python.
 Refer to <a href="https://github.com/adki/cosim_bfm_library">HW-SW co-simulation library</a> repository.
 <img src="doc/images/cosimulation_bfm.png" width="500"/>
@@ -528,12 +530,15 @@ Refer to <a href="https://github.com/adki/cosim_bfm_library">HW-SW co-simulation
 # 7. Other things<a name="other_things"></a>
 
 ### Author(s)
- * **Ando Ki** - *Initial work* - <a href="http://www.future-ds.com" target="_blank">Future Design Systems</a>
+ * **Ando Ki** - *Initial work* - <a href="http://www.future-ds.com" target="_blank">Future Design Systems</a> and <a href="https://www.kaist.ac.kr" target="_blank">KAIST.</a>
 
 ### Acknowledgments
 Thanks to all who gave me valuable feedback.
 
 ### Revision history<a name="revision_history"></a>
+ * 2023.07.16: Bug-fixed: SystemVerilog keyword conflict resolved.
+               Simulation using Vivado XSIM in 'verification' uses SystemVerilog compiler.
+               (Thanks 'dale40' for raising this issue.)<br>
  * 2021.09.05: Bug-fixed: 'ADDR_BASE' parameter updated to support address wider than 32-bit in 'gen_axi_top.sh'.
  * 2021.09.05: Bug-fixed: address range parameters changed from "32'h???" to "'h???" to support wider address width.
  * 2021.07.10: 'gen_amba_axi' option changed.

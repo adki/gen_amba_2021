@@ -11,6 +11,7 @@ MAKEFILE	= Makefile
 #------------------------------------------------------------------
 unexport PLIOBJS
 #--------------------------------------------------------
+ifeq ($(MAKECMDGOALS),$(findstring $(MAKECMDGOALS), "" "all" "vlib" "compile" "simulate"))
 VLIB	= $(shell which vlib)
 VLOG	= $(shell which vlog)
 VSIM	= $(shell which vsim)
@@ -29,6 +30,7 @@ ifeq ($(shell test $(MAJOR) -ge 10; echo $$?),0)
 	VOPT=-novopt -l transcript
 else
 	VOPT=-l transcript
+endif
 endif
 #--------------------------------------------------------
 WORK	 = work

@@ -29,7 +29,7 @@ make_top:
 
 
 compile:
-	($(VLOG) -o $(TOP).vvp -s $(TOP)\
+	($(VLOG) -g2012 -o $(TOP).vvp -s $(TOP)\
                 -I../../design -I../../ip\
                 ./sim_define_${MST}.v\
                 ../../ip/${MST}_tester.v\
@@ -49,7 +49,7 @@ clean:
 	/bin/rm -f  vvp.log
 	/bin/rm -f  result.bmp
 
-cleanup: clean
+cleanup clobber: clean
 
-clobber: cleanup
+cleanupall distclean: cleanup
 #--------------------------------------------------------

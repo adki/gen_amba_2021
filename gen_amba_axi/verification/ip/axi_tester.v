@@ -104,7 +104,7 @@ module axi_tester
      , output reg                  CSYSACK
      , output reg                  CACTIVE
      //-----------------------------------------------------------
-     , output reg                  busy_out=1'b0
+     , output reg                  busy_out
      , input  wire                 busy_in
 );
      //-----------------------------------------------------------
@@ -129,6 +129,7 @@ module axi_tester
      integer    idx;
      //-----------------------------------------------------------
      initial begin
+           busy_out    = 1'b0;
            CSYSACK     = 1'b0;
            CACTIVE     = 1'b1;
            AWID        = 0;

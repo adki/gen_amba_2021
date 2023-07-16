@@ -5,7 +5,9 @@ obj
 amba_axi_m*s*.v
 gen_amba_axi
 src.old
-src.old*
+src.202107.old
+src.old.old
+src.zip.txt
 verification.old
 *.vcd
 verification/design/*

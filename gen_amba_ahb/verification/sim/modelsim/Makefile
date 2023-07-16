@@ -11,6 +11,7 @@ MAKEFILE	= Makefile
 #------------------------------------------------------------------
 unexport PLIOBJS
 #--------------------------------------------------------
+ifeq ($(MAKECMDGOALS),$(findstring $(MAKECMDGOALS), "" "all" "vlib" "compile" "simulate"))
 VLIB	= $(shell which vlib)
 VLOG	= $(shell which vlog)
 VSIM	= $(shell which vsim)
@@ -29,6 +30,7 @@ ifeq ($(shell test $(MAJOR) -ge 10; echo $$?),0)
 	VOPT=-novopt -l transcript
 else
 	VOPT=-l transcript
+endif
 endif
 #--------------------------------------------------------
 WORK	= work
@@ -78,18 +80,18 @@ simulate: compile
 
 #--------------------------------------------------------
 clean:
-	-@/bin/rm -rf $(WORK)
-	-@/bin/rm -f  transcript
-	-@/bin/rm -f  wave.vcd dump.vcd
-	-@/bin/rm -f  vsim.wlf
-	-@/bin/rm -f  vish_stacktrace.vstf
-	-@/bin/rm -f  wlft*
-	-@/bin/rm -f  compile.log
+	@/bin/rm -rf $(WORK)
+	@/bin/rm -f  transcript
+	@/bin/rm -f  wave.vcd dump.vcd
+	@/bin/rm -f  vsim.wlf
+	@/bin/rm -f  vish_stacktrace.vstf
+	@/bin/rm -f  wlft*
+	@/bin/rm -f  compile.log
 
 cleanup clobber: clean
-	-@/bin/rm -f $(BUS_V) $(TOP_V)
+	@/bin/rm -f $(BUS_V) $(TOP_V)
 
 cleanupall distclean: cleanup
-	-@/bin/rm -f ../../design/amba_ahb_m*s*.v
+	@/bin/rm -f ../../design/amba_ahb_m*s*.v
 
 #--------------------------------------------------------

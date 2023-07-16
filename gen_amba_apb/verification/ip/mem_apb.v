@@ -22,7 +22,7 @@ module mem_apb
      , input   wire        PENABLE
      , input   wire [31:0] PADDR
      , input   wire        PWRITE
-     , output  reg  [31:0] PRDATA=32'h0
+     , output  reg  [31:0] PRDATA
      , input   wire [31:0] PWDATA
      `ifdef AMBA_APB3
      , output  wire        PREADY
@@ -89,12 +89,16 @@ module mem_apb
    //                        _________
    // PENABLE ______________|         |_____
    //
-   always @ (posedge PCLK) begin
-        if (PRESETn & PSEL & ~PENABLE & ~PWRITE) begin
-            PRDATA[ 7: 0] <= mem0[TA];
-            PRDATA[15: 8] <= mem1[TA];
-            PRDATA[23:16] <= mem2[TA];
-            PRDATA[31:24] <= mem3[TA];
+   always @ (posedge PCLK or negedge PRESETn) begin
+        if (PRESETn==1'b0) begin
+            PRDATA <= 32'h0;
+        end else begin
+            if (PSEL & ~PENABLE & ~PWRITE) begin
+                PRDATA[ 7: 0] <= mem0[TA];
+                PRDATA[15: 8] <= mem1[TA];
+                PRDATA[23:16] <= mem2[TA];
+                PRDATA[31:24] <= mem3[TA];
+            end
         end
    end
    //---------------------------------------------------------------------------
